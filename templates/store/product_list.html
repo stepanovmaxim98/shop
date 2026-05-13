@@ -1,17 +1,44 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <div class="row">
-        {% for product in products %}
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5>{{ product.name }}</h5>
-                    <p>{{ product.price }}</p>
-                    <a class="btn btn-primary" href="{% url 'product_detail' product.id %}">Открыть товар</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+{% extends 'base.html' %} {% block content %}
+<h2 class="mt-4 mb-4">Товары</h2>
+<div class="row">
+  {% for product in products %}
+  <div class="col-md-4">
+    <div class="card mb-3">
+      {% if product.image %}
+      <img
+        src="{{ product.image.url }}"
+        class="card-img-top"
+        alt="{{ product.name }}"
+        style="height: 250px; object-fit: cover"
+      />
+      {% else %}
+      <div
+        class="card-img-top"
+        style="
+          height: 250px;
+          background-color: #f0f0f0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <span class="text-muted">Нет изображения</span>
+      </div>
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text text-truncate">{{ product.description }}</p>
+        <h4 class="text-primary">{{ product.price }} ₽</h4>
+        <a class="btn btn-primary" href="{% url 'product_detail' product.id %}"
+          >Открыть товар</a
+        >
+      </div>
     </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <p class="text-center text-muted">Товары не найдены</p>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

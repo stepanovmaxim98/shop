@@ -1,21 +1,46 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<h2 class="mt-4">Ваша корзина</h2>
 
-{% block content %}
-    <h2>Ваша корзина</h2>
-    <p>Количество товаров: {{ total_items }}</p>
+{% if items %}
+<p class="text-muted">Количество товаров: {{ total_items }}</p>
 
-    <table class="table">
-        <tr>
-            <th>Товар</th>
-            <th>Количество</th>
-            <th>Цена</th>
-        </tr>
-        {% for item in items %}
-        <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.total_price }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endblock %}
+<table class="table table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Товар</th>
+      <th>Цена</th>
+      <th>Количество</th>
+      <th>Сумма</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>
+        <a href="{% url 'product_detail' item.product.id %}"
+          >{{ item.product.name }}</a
+        >
+      </td>
+      <td>{{ item.product.price }} ₽</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.total_price }} ₽</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="alert alert-info">
+  <h4>Итого: <strong>{{ total_price }} ₽</strong></h4>
+</div>
+
+<a href="{% url 'product_list' %}" class="btn btn-secondary"
+  >Продолжить покупки</a
+>
+{% else %}
+<div class="alert alert-warning mt-4">
+  <p>Ваша корзина пуста</p>
+  <a href="{% url 'product_list' %}" class="btn btn-primary"
+    >Вернуться к товарам</a
+  >
+</div>
+{% endif %} {% endblock %}
